@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
+  const [message, setMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -42,6 +44,10 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
+      setMessage('wrong username or password')
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
     }
   }
 
@@ -59,17 +65,25 @@ const App = () => {
 
   const addBlog = async (event) => {
     event.preventDefault()
-    const blogObject = {
-      title: title,
-      author: author,
-      url: url
+    
+    try {
+      const blogObject = {
+        title: title,
+        author: author,
+        url: url
+      }
+      const returnedBlog = await blogService.create(blogObject)
+      setBlogs(blogs.concat(returnedBlog))
+      setMessage(`a new blog ${title} by ${author} added`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+    } catch (exception) {
+      
     }
-
-    const returnedBlog = await blogService.create(blogObject)
-    setBlogs(blogs.concat(returnedBlog))
-    setTitle('')
-    setAuthor('')
-    setUrl('')
   }
 
   const handleTitleChange = (event) => {
@@ -88,6 +102,7 @@ const App = () => {
     return (
       <div>
         <h2>Log in to application</h2>
+        <Notification message={message} />
         <form onSubmit={handleLogin}>
           <div>
             username
@@ -117,6 +132,7 @@ const App = () => {
     <div>
       <div>
         <h2>blogs</h2>
+        <Notification message={message} />
         <p>{user.name} logged in</p>
         <button onClick={handleLogout}>logout</button>
       </div>
