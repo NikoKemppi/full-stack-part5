@@ -64,9 +64,14 @@ const App = () => {
     }
   }
 
-  const addNote = async (blogObject) => {
+  const addBlog = async (blogObject, user) => {
     noteFormRef.current.toggleVisibility()
     const returnedBlog = await blogService.create(blogObject)
+    returnedBlog.user = {
+      id: user.id,
+      name: user.name,
+      username: user.username,
+    }
     setBlogs(blogs.concat(returnedBlog))
   }
 
@@ -110,10 +115,10 @@ const App = () => {
       </div>
       <div>
         <Togglable buttonLabel1="create new blog" buttonLabel2="cancel" ref={noteFormRef}>
-          <BlogForm createBlog={addNote} setMessage={setMessage} />
+          <BlogForm createBlog={addBlog} setMessage={setMessage} user={user} />
         </Togglable>
         {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} username={user.name} />
         )}
       </div>
     </div>

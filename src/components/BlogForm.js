@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const BlogForm = ({ createBlog, setMessage }) => {
+const BlogForm = ({ createBlog, setMessage, user }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -12,7 +12,7 @@ const BlogForm = ({ createBlog, setMessage }) => {
         title: title,
         author: author,
         url: url
-      })
+      }, user)
       if (title !== '' && url !== '') {
         setMessage(`a new blog ${title} by ${author} added`)
         setTimeout(() => {
