@@ -45,7 +45,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
-      setMessage('wrong username or password')
+      setMessage('Error: wrong username or password')
       setTimeout(() => {
         setMessage(null)
       }, 5000)
@@ -60,7 +60,10 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (execption) {
-
+      setMessage('Error: log out failed')
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
     }
   }
 
@@ -72,8 +75,11 @@ const App = () => {
       name: user.name,
       username: user.username,
     }
+    // console.log("modified blog: ", returnedBlog)
     setBlogs(blogs.concat(returnedBlog))
   }
+
+  // console.log("Blogs:", blogs)
 
   if (user === null) {
     return (

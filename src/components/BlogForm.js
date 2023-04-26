@@ -23,7 +23,10 @@ const BlogForm = ({ createBlog, setMessage, user }) => {
       setAuthor('')
       setUrl('')
     } catch (exception) {
-
+      setMessage('Error: could not add the blog')
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
     }
   }
 

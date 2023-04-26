@@ -1,7 +1,7 @@
 const Notification = ({ message }) => {
     if (message === null) {
       return null
-    } else if (message === "wrong username or password") {
+    } else if (message.startsWith("Error")) {
         return (
             <div className="error">
               {message}

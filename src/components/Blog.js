@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, username }) => {
   const [showDetails, setShowDetails] = useState(false)
   const [buttonText, setButtonText] = useState('view')
+  // refresh trigger is used to force re-rendering the blog
+  const [refreshTrigger, setRefreshTrigger] = useState(false)
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -12,7 +14,9 @@ const Blog = ({ blog }) => {
     marginBottom: 5
   }
 
-  const detailForm = () => (
+  const detailForm = () => {
+    // console.log(blog)
+    return (
     <div>
       <p>{blog.url}</p>
       <div>
@@ -20,9 +24,9 @@ const Blog = ({ blog }) => {
         <button onClick={handleLikeClick}>like</button>
       </div>
       <p>{blog.user.name}</p>
-      <button onClick={handleRemove}>remove</button>
-    </div>
-  )
+      {username === blog.user.name && <button onClick={handleRemove}>remove</button>}
+    </div>)
+  }
 
   const handleButtonClick = () => {
     if (buttonText === 'view') {
@@ -35,19 +39,26 @@ const Blog = ({ blog }) => {
 
   const handleLikeClick = (event) => {
     event.preventDefault()
+    blog.likes += 1
     const updatedBlogObject = {
       user: blog.user._id,
-      likes: blog.likes + 1,
+      likes: blog.likes,
       author: blog.author,
       title: blog.title,
       url: blog.url
     }
     console.log(blog)
     blogService.update(blog.id, updatedBlogObject)
+    setRefreshTrigger(!refreshTrigger)
   }
 
-  const handleRemove = () => {
-    // blogService.remove(blog.id)
+  const handleRemove = async (event) => {
+    event.preventDefault()
+    const removedId = blog.id
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+      await blogService.remove(removedId)
+      window.location.reload(false);
+    }
   }
 
   return (
