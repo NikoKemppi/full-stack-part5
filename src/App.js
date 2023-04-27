@@ -75,11 +75,45 @@ const App = () => {
       name: user.name,
       username: user.username,
     }
-    // console.log("modified blog: ", returnedBlog)
+    console.log('modified blog: ', returnedBlog)
     setBlogs(blogs.concat(returnedBlog))
   }
 
-  // console.log("Blogs:", blogs)
+  /*
+  const updateBlog = async (blog) => {
+    const updatedBlogObject = {
+      user: blog.user._id,
+      likes: blog.likes + 1,
+      author: blog.author,
+      title: blog.title,
+      url: blog.url
+    }
+    const updatedBlog = {
+      user: {
+        username: blog.user.username,
+        name: blog.user.name,
+        _id: blog.uset._id,
+      },
+      likes: blog.likes + 1,
+      author: blog.author,
+      title: blog.title,
+      url: blog.url,
+      _id: blog.id
+    }
+    console.log(blog)
+    blogService.update(blog.id, updatedBlogObject)
+    const updatedBlogs = blogs.map(b => b.id === blog.id ? updatedBlog : b)
+    setBlogs(updatedBlogs)
+  }
+
+  const deleteBlog = async (blog) => {
+    const removedId = blog.id
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
+      await blogService.remove(removedId)
+      setBlogs(blogs.filter(b => b.id !== removedId))
+    }
+  }
+  */
 
   if (user === null) {
     return (

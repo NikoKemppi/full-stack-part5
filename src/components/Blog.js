@@ -17,15 +17,15 @@ const Blog = ({ blog, username }) => {
   const detailForm = () => {
     // console.log(blog)
     return (
-    <div>
-      <p>{blog.url}</p>
       <div>
-        likes {blog.likes}
-        <button onClick={handleLikeClick}>like</button>
-      </div>
-      <p>{blog.user.name}</p>
-      {username === blog.user.name && <button onClick={handleRemove}>remove</button>}
-    </div>)
+        <p>{blog.url}</p>
+        <div>
+          likes {blog.likes}
+          <button onClick={handleLikeClick}>like</button>
+        </div>
+        <p>{blog.user.name}</p>
+        {username === blog.user.name && <button onClick={handleRemove}>remove</button>}
+      </div>)
   }
 
   const handleButtonClick = () => {
@@ -39,10 +39,10 @@ const Blog = ({ blog, username }) => {
 
   const handleLikeClick = (event) => {
     event.preventDefault()
-    blog.likes += 1
+    const newLikes = blog.likes + 1
     const updatedBlogObject = {
       user: blog.user._id,
-      likes: blog.likes,
+      likes: newLikes,
       author: blog.author,
       title: blog.title,
       url: blog.url
@@ -57,7 +57,7 @@ const Blog = ({ blog, username }) => {
     const removedId = blog.id
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
       await blogService.remove(removedId)
-      window.location.reload(false);
+      window.location.reload(false)
     }
   }
 
