@@ -1,11 +1,8 @@
 import { useState } from 'react'
-import blogService from '../services/blogs'
 
-const Blog = ({ blog, username }) => {
+const Blog = ({ blog, username, updateBlog, deleteBlog }) => {
   const [showDetails, setShowDetails] = useState(false)
   const [buttonText, setButtonText] = useState('view')
-  // refresh trigger is used to force re-rendering the blog
-  const [refreshTrigger, setRefreshTrigger] = useState(false)
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -39,30 +36,16 @@ const Blog = ({ blog, username }) => {
 
   const handleLikeClick = (event) => {
     event.preventDefault()
-    const newLikes = blog.likes + 1
-    const updatedBlogObject = {
-      user: blog.user._id,
-      likes: newLikes,
-      author: blog.author,
-      title: blog.title,
-      url: blog.url
-    }
-    console.log(blog)
-    blogService.update(blog.id, updatedBlogObject)
-    setRefreshTrigger(!refreshTrigger)
+    updateBlog(blog)
   }
 
-  const handleRemove = async (event) => {
+  const handleRemove = (event) => {
     event.preventDefault()
-    const removedId = blog.id
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      await blogService.remove(removedId)
-      window.location.reload(false)
-    }
+    deleteBlog(blog)
   }
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className='blog'>
       {blog.title} {blog.author}
       <button onClick={handleButtonClick}>{buttonText}</button>
       {showDetails && detailForm()}

@@ -28,7 +28,7 @@ const App = () => {
     }
   }, [])
 
-  const noteFormRef = useRef()
+  const blogFormRef = useRef()
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -68,18 +68,17 @@ const App = () => {
   }
 
   const addBlog = async (blogObject, user) => {
-    noteFormRef.current.toggleVisibility()
+    blogFormRef.current.toggleVisibility()
     const returnedBlog = await blogService.create(blogObject)
     returnedBlog.user = {
       id: user.id,
       name: user.name,
       username: user.username,
     }
-    console.log('modified blog: ', returnedBlog)
+    // console.log('modified blog: ', returnedBlog)
     setBlogs(blogs.concat(returnedBlog))
   }
 
-  /*
   const updateBlog = async (blog) => {
     const updatedBlogObject = {
       user: blog.user._id,
@@ -88,21 +87,10 @@ const App = () => {
       title: blog.title,
       url: blog.url
     }
-    const updatedBlog = {
-      user: {
-        username: blog.user.username,
-        name: blog.user.name,
-        _id: blog.uset._id,
-      },
-      likes: blog.likes + 1,
-      author: blog.author,
-      title: blog.title,
-      url: blog.url,
-      _id: blog.id
-    }
     console.log(blog)
-    blogService.update(blog.id, updatedBlogObject)
-    const updatedBlogs = blogs.map(b => b.id === blog.id ? updatedBlog : b)
+    const returnedBlog = await blogService.update(blog.id, updatedBlogObject)
+    // console.log('updated blog: ', returnedBlog)
+    const updatedBlogs = blogs.map(b => b.id === blog.id ? returnedBlog : b)
     setBlogs(updatedBlogs)
   }
 
@@ -113,7 +101,6 @@ const App = () => {
       setBlogs(blogs.filter(b => b.id !== removedId))
     }
   }
-  */
 
   if (user === null) {
     return (
@@ -154,11 +141,11 @@ const App = () => {
         <button onClick={handleLogout}>logout</button>
       </div>
       <div>
-        <Togglable buttonLabel1="create new blog" buttonLabel2="cancel" ref={noteFormRef}>
+        <Togglable buttonLabel1="create new blog" buttonLabel2="cancel" ref={blogFormRef}>
           <BlogForm createBlog={addBlog} setMessage={setMessage} user={user} />
         </Togglable>
         {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
-          <Blog key={blog.id} blog={blog} username={user.name} />
+          <Blog key={blog.id} blog={blog} username={user.name} updateBlog={updateBlog} deleteBlog={deleteBlog} />
         )}
       </div>
     </div>
