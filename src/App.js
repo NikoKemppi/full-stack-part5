@@ -67,7 +67,7 @@ const App = () => {
     }
   }
 
-  const addBlog = async (blogObject, user) => {
+  const addBlog = async (blogObject) => {
     blogFormRef.current.toggleVisibility()
     const returnedBlog = await blogService.create(blogObject)
     returnedBlog.user = {
@@ -80,15 +80,17 @@ const App = () => {
   }
 
   const updateBlog = async (blog) => {
+    // console.log(blog)
     const updatedBlogObject = {
-      user: blog.user._id,
+      user: blog.user.id,
       likes: blog.likes + 1,
       author: blog.author,
       title: blog.title,
       url: blog.url
     }
-    console.log(blog)
+    // console.log(blog)
     const returnedBlog = await blogService.update(blog.id, updatedBlogObject)
+    returnedBlog.user = blog.user
     // console.log('updated blog: ', returnedBlog)
     const updatedBlogs = blogs.map(b => b.id === blog.id ? returnedBlog : b)
     setBlogs(updatedBlogs)
@@ -142,7 +144,7 @@ const App = () => {
       </div>
       <div>
         <Togglable buttonLabel1="create new blog" buttonLabel2="cancel" ref={blogFormRef}>
-          <BlogForm createBlog={addBlog} setMessage={setMessage} user={user} />
+          <BlogForm createBlog={addBlog} setMessage={setMessage} />
         </Togglable>
         {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
           <Blog key={blog.id} blog={blog} username={user.name} updateBlog={updateBlog} deleteBlog={deleteBlog} />

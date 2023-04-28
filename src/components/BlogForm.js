@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const BlogForm = ({ createBlog, setMessage, user }) => {
+const BlogForm = ({ createBlog, setMessage }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -12,7 +12,7 @@ const BlogForm = ({ createBlog, setMessage, user }) => {
         title: title,
         author: author,
         url: url
-      }, user)
+      })
       if (title !== '' && url !== '') {
         setMessage(`a new blog ${title} by ${author} added`)
         setTimeout(() => {
@@ -31,12 +31,13 @@ const BlogForm = ({ createBlog, setMessage, user }) => {
   }
 
   return (
-    <div>
+    <div className='blogform'>
       <h2>create new</h2>
       <form onSubmit={addBlog}>
         <div>
           title:
           <input
+            className='newblogtitle'
             value={title}
             onChange={event => setTitle(event.target.value)}
           />
@@ -44,6 +45,7 @@ const BlogForm = ({ createBlog, setMessage, user }) => {
         <div>
           author:
           <input
+            className='newblogauthor'
             value={author}
             onChange={event => setAuthor(event.target.value)}
           />
@@ -51,6 +53,7 @@ const BlogForm = ({ createBlog, setMessage, user }) => {
         <div>
           url:
           <input
+            className='newblogurl'
             value={url}
             onChange={event => setUrl(event.target.value)}
           />
