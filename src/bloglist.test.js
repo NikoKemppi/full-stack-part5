@@ -74,9 +74,24 @@ describe('<BlogForm />', () => {
 
   test('the form calls the event handler it received when a blog is created', async () => {
     const user = userEvent.setup()
+    const input1 = screen.getByPlaceholderText('new blog title')
+    const input2 = screen.getByPlaceholderText('new blog author')
+    const input3 = screen.getByPlaceholderText('new blog url')
     const button = screen.getByText('create')
+
+    await userEvent.type(input1, 'Willie Watson')
+    await userEvent.type(input2, 'Sherlock Holmes Fan Club')
+    await userEvent.type(input3, 'www.blogit.com/sherlock')
     await user.click(button)
 
+    console.log(mockHandlerAdd.mock)
     expect(mockHandlerAdd.mock.calls).toHaveLength(1) // details still needed
+    expect(mockHandlerAdd.mock.lastCall).toEqual(
+      [{
+        title: 'Willie Watson',
+        author: 'Sherlock Holmes Fan Club',
+        url: 'www.blogit.com/sherlock'
+      }]
+    )
   })
 })
